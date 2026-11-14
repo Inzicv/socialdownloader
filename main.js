@@ -310,6 +310,7 @@ function createWindow() {
     backgroundColor: '#111214',
     title: APP_NAME,
     autoHideMenuBar: true,
+    icon: path.join(__dirname, 'assets', 'icon.png'),
     webPreferences: {
       contextIsolation: true,
       sandbox: true,

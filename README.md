@@ -30,6 +30,14 @@ npm install
 npm start
 ```
 
+## Créer l'installeur Windows
+
+```bash
+npm run dist
+```
+
+Le fichier `distSocialDownloader-Setup-<version>.exe` installe l'appli pour l'utilisateur courant, avec un raccourci sur le bureau et un désinstalleur. L'installeur n'est pas signé : au premier lancement, Windows SmartScreen demande une confirmation (« Informations complémentaires », puis « Exécuter quand même »).
+
 ## Utilisation
 
 1. Choisis le dossier de destination avec « Changer de dossier » (par défaut `Téléchargements\Social Downloader`).
@@ -60,6 +68,7 @@ Tout reste sur l'ordinateur, dans `%APPDATA%\socialdownloader\` :
 | `ui/` | Interface en HTML, CSS et JavaScript, sans étape de build |
 | `test/` | Tests unitaires du moteur et de la file |
 | `scripts/smoke.js` | Lance la vraie appli et capture chaque vue |
+| `assets/` | Icône de l'appli (source SVG et PNG) |
 
 Côté sécurité, la fenêtre est isolée (`contextIsolation`, `sandbox`, politique de contenu stricte) et ne peut appeler que les canaux listés dans `preload.js`. Les liens sont toujours passés à yt-dlp comme arguments séparés, jamais à travers un shell.
 
@@ -80,7 +89,7 @@ Avec la variable d'environnement `SMOKE_DOWNLOAD=1`, ce script télécharge auss
 ## Limites connues
 
 - Les publications Instagram composées uniquement de photos ne sont pas prises en charge par yt-dlp.
-- L'appli n'est ni signée ni empaquetée en installeur : elle se lance depuis les sources.
+- L'installeur n'est pas signé et l'appli ne se met pas à jour toute seule (seul yt-dlp le fait).
 - Testée sous Windows uniquement.
 
 ## Crédits
