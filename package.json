@@ -1,6 +1,6 @@
 {
-  "name": "mon-downloader",
-  "productName": "Mon Downloader",
+  "name": "socialdownloader",
+  "productName": "Social Downloader",
   "version": "0.1.0",
   "description": "Téléchargeur de médias en ligne, pilote yt-dlp directement (sans serveur local).",
   "private": true,

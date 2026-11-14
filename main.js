@@ -20,8 +20,8 @@ const EXE = process.platform === 'win32' ? '.exe' : ''
 const HISTORY_LIMIT = 300
 
 app.setName(APP_NAME)
-app.setPath('userData', path.join(app.getPath('appData'), 'mon-downloader'))
-if (process.platform === 'win32') app.setAppUserModelId('local.mon-downloader')
+app.setPath('userData', path.join(app.getPath('appData'), 'socialdownloader'))
+if (process.platform === 'win32') app.setAppUserModelId('local.socialdownloader')
 
 if (!app.requestSingleInstanceLock()) {
   app.quit()
