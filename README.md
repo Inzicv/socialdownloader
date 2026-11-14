@@ -16,9 +16,11 @@ L'appli pilote [yt-dlp](https://github.com/yt-dlp/yt-dlp) directement depuis Ele
 
 ## Prérequis
 
-- [Node.js](https://nodejs.org) 22 ou plus récent.
-- [ffmpeg](https://ffmpeg.org) installé et présent dans le `PATH` (par exemple `winget install Gyan.FFmpeg`). Sans lui, la haute qualité et le MP3 ne fonctionnent pas.
-- `yt-dlp` n'est pas à installer : l'appli le télécharge au premier lancement depuis les versions officielles, puis le met à jour à chaque démarrage.
+L'installeur Windows contient tout : `yt-dlp` et `ffmpeg` sont embarqués, il n'y a rien d'autre à installer.
+
+Pour lancer l'appli depuis les sources, il faut [Node.js](https://nodejs.org) 22 ou plus récent. La commande `npm run fetch-bins` télécharge `yt-dlp` et `ffmpeg` dans `vendor/bin/`. Sans cette étape, l'appli utilise le `ffmpeg` du `PATH` et télécharge `yt-dlp` au premier lancement.
+
+Dans tous les cas, `yt-dlp` se met à jour seul à chaque démarrage.
 
 ## Installation et lancement
 
@@ -36,7 +38,9 @@ npm start
 npm run dist
 ```
 
-Le fichier `distSocialDownloader-Setup-<version>.exe` installe l'appli pour l'utilisateur courant, avec un raccourci sur le bureau et un désinstalleur. L'installeur n'est pas signé : au premier lancement, Windows SmartScreen demande une confirmation (« Informations complémentaires », puis « Exécuter quand même »).
+La commande télécharge d'abord `yt-dlp` (dernière version officielle) et `ffmpeg` (build statique de gyan.dev) dans `vendor/bin/`, en vérifiant la somme SHA-256 publiée par chaque éditeur, puis les embarque dans l'installeur.
+
+Le fichier `dist\SocialDownloader-Setup-<version>.exe` installe l'appli pour l'utilisateur courant, avec un raccourci sur le bureau et un désinstalleur. L'installeur n'est pas signé : au premier lancement, Windows SmartScreen demande une confirmation (« Informations complémentaires », puis « Exécuter quand même »).
 
 ## Utilisation
 
@@ -54,7 +58,7 @@ Tout reste sur l'ordinateur, dans `%APPDATA%\socialdownloader\` :
 |---|---|
 | Réglages | `settings.json` |
 | Historique | `history.json` |
-| yt-dlp | `bin\yt-dlp.exe` |
+| yt-dlp (copie qui se met à jour) | `bin\yt-dlp.exe` |
 
 ## Organisation du code
 
@@ -67,6 +71,7 @@ Tout reste sur l'ordinateur, dans `%APPDATA%\socialdownloader\` :
 | `lib/store.js` | Lecture et écriture atomique des fichiers JSON |
 | `ui/` | Interface en HTML, CSS et JavaScript, sans étape de build |
 | `test/` | Tests unitaires du moteur et de la file |
+| `scripts/fetch-bins.js` | Télécharge et vérifie yt-dlp et ffmpeg pour l'installeur |
 | `scripts/smoke.js` | Lance la vraie appli et capture chaque vue |
 | `assets/` | Icône de l'appli (source SVG et PNG) |
 
