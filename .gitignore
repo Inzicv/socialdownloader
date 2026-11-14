@@ -2,3 +2,4 @@ node_modules/
 captures/
 apercu.png
 dist/
+vendor/

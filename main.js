@@ -32,7 +32,11 @@ const USER_DATA = app.getPath('userData')
 const BIN_DIR = path.join(USER_DATA, 'bin')
 const SETTINGS_FILE = path.join(USER_DATA, 'settings.json')
 const HISTORY_FILE = path.join(USER_DATA, 'history.json')
-// The previous app keeps its own yt-dlp and ffmpeg here; reused when present.
+// yt-dlp and ffmpeg shipped with the app (see scripts/fetch-bins.js).
+const BUNDLED_BIN = app.isPackaged
+  ? path.join(process.resourcesPath, 'bin')
+  : path.join(__dirname, 'vendor', 'bin')
+// The previous app keeps its own yt-dlp and ffmpeg here; a fallback when running from source.
 const LEGACY_BIN = path.join(app.getPath('appData'), 'social-downloader', 'bin')
 
 let mainWindow = null
@@ -76,9 +80,11 @@ async function ensureYtdlp() {
   const target = path.join(BIN_DIR, `yt-dlp${EXE}`)
   if (fs.existsSync(target)) return target
   fs.mkdirSync(BIN_DIR, { recursive: true })
-  const legacy = path.join(LEGACY_BIN, `yt-dlp${EXE}`)
-  if (fs.existsSync(legacy)) {
-    fs.copyFileSync(legacy, target)
+  // Copied out of the install folder: yt-dlp updates itself in place, and the
+  // install folder is not always writable.
+  for (const source of [path.join(BUNDLED_BIN, `yt-dlp${EXE}`), path.join(LEGACY_BIN, `yt-dlp${EXE}`)]) {
+    if (!fs.existsSync(source)) continue
+    fs.copyFileSync(source, target)
     return target
   }
   const asset = { win32: 'yt-dlp.exe', darwin: 'yt-dlp_macos', linux: 'yt-dlp_linux' }[process.platform]
@@ -92,8 +98,10 @@ async function ensureYtdlp() {
   return target
 }
 
-/** null when ffmpeg is on PATH (yt-dlp finds it alone), else an explicit path. */
+/** The bundled ffmpeg when there is one; null when relying on PATH (yt-dlp finds it alone). */
 function locateFfmpeg() {
+  const bundled = path.join(BUNDLED_BIN, `ffmpeg${EXE}`)
+  if (fs.existsSync(bundled)) return { found: true, path: bundled }
   const lookup = spawnSync(process.platform === 'win32' ? 'where' : 'which', ['ffmpeg'], { windowsHide: true })
   if (lookup.status === 0) return { found: true, path: null }
   const legacy = path.join(LEGACY_BIN, `ffmpeg${EXE}`)
