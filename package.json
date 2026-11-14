@@ -1,0 +1,15 @@
+{
+  "name": "mon-downloader",
+  "productName": "Mon Downloader",
+  "version": "0.1.0",
+  "description": "Téléchargeur de médias en ligne, pilote yt-dlp directement (sans serveur local).",
+  "private": true,
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "test": "node --test"
+  },
+  "devDependencies": {
+    "electron": "44.5.1"
+  }
+}
